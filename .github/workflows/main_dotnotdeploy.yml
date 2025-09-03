@@ -27,14 +27,14 @@ jobs:
       - name: Restore NuGet packages
         run: nuget restore eShopOnWeb.sln
 
-      - name: Publish to folder
-        run: msbuild eShopOnWeb.sln /nologo /verbosity:m /t:Build /t:pipelinePreDeployCopyAllFilesToOneFolder /p:_PackageTempDir="\published\"
+      - name: Publish Web project
+        run: dotnet publish src/Web/Web.csproj --configuration Release --output published
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: ASP-app
-          path: '/published/**'
+          path: published/
 
   deploy:
     runs-on: windows-latest
